@@ -1,0 +1,36 @@
+body {
+    background: linear-gradient(to right, green, blue);
+    color: white;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 20px;
+}
+
+input {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button:hover {
+    background: rgb(82, 7, 120);
+    color: white;
+}
+
+.short-link {
+    color: white;
+    transition: 0.3s ease;
+}
+
+.short-link:hover {
+    color: yellow;
+}
