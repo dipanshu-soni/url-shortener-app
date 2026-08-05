@@ -1,6 +1,6 @@
 const urlInput = document.getElementById('urlInput');
 const shortenBtn = document.getElementById('shortenBtn');
-const result = document.getElementById('result');
+const result = document.getElementById('output-field');
 
 shortenBtn.addEventListener('click', async () => {
     const originalUrl = urlInput.value.trim();

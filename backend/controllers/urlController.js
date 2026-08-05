@@ -1,17 +1,21 @@
-//In JavaScript and Node.js, exports is a built-in mechanism that lets you share code between different files.
-
 const shortid = require('shortid');
-const Url = require('./urlModel');
+const Url = require('../models/urlModel');
 
 exports.shortenUrl = async (req, res) => {
     try
     {
-        res.send("Shorten URL Route is working !");
+        res.json({
+            success: true,
+            message: "Shorten URL Route is working !"
+        });
     }
     catch(error)
     {
+        console.log("TestFailError: ", error);
         res.status(500).json({
-            message: "Server Error"
+            success: false,
+            message: "Server Error !",
+            error: error.message
         });
     }
 };
@@ -21,13 +25,22 @@ exports.shortenUrl = async (req, res) => {
     try
     {
         const {originalUrl} = req.body;
-        console.log(originalUrl);
+        console.log("Original URL: ", originalUrl);
 
-         new URL(originalUrl);  // checks if URL is vaild or not.
+        if(!originalUrl)
+        {
+            return res.status(400).json({
+                success: false,
+                message: "This field is required !"
+            });
+        }
+
+        // check if URL is vaild or not.
+        const validateUrl = new URL(originalUrl);
 
         // Generate Short Code
         const shortCode = shortid.generate();
-        console.log(shortCode);
+        console.log("Short Code: ", shortCode);
 
         // Create Database Document
         const newUrl = new Url({
@@ -40,15 +53,18 @@ exports.shortenUrl = async (req, res) => {
 
         // Send Response
         res.json({
+            success: true,
+            message: "Short URL generated.",
             shortUrl: `http://localhost:${process.env.PORT}/${shortCode}`
         });
     }
     catch(error)
     {
-        console.log(error);
-
-        res.status(400).json({
-            message: "Invalid URL"
+        console.log("ShortCodeGenerateError: ", error);
+        res.status(500).json({
+            success: false,
+            message: "Server Error !",
+            error: error.message
         });
     }
 };
@@ -62,19 +78,13 @@ exports.redirectUrl = async (req, res) => {
             shortCode
         });
 
-        if(existingUrl)
-        {
-            return res.json({
-                shortUrl: `http://localhost:${process.env.PORT}/${existingUrl.shortCode}`
-            });
-        }
-
         if(url)
             return res.redirect(url.originalUrl);
         else
         {
             return res.status(404).json({
-                message: "URL not found"
+                success: false,
+                message: "URL not found !"
             });
         }
     }
@@ -82,7 +92,8 @@ exports.redirectUrl = async (req, res) => {
     {
         console.log(error);
         res.status(500).json({
-            message: "Server Error"
+            success: false,
+            message: "Server Error !"
         });
     }
 };
